@@ -54,3 +54,14 @@ export async function updatePassword(token) {
     return {message: err};
   }
 }
+
+export async function deleteUser(uid) {
+  try{
+    await adminAuth.deleteUser(uid);
+    console.log("User deleted");
+    return {message:"User deleted"};
+  }catch(err){
+    console.log(err);
+    return {message: err};
+  }
+}

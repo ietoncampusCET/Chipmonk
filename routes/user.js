@@ -1,8 +1,26 @@
 import  express, { Router }  from "express";
-import { createUser,signinUser ,updatePassword} from "../controller/user.js";
+import { 
+        createUser,
+        signinUser ,
+        updatePassword,
+        deleteUser
+    } from "../controller/user.js";
 import { getUserbyToken } from "../helper/userManagement.js";
 
+
+// initialize router
 const router = express.Router();
+
+/*
+endpoints for user management
+--------------------------------
+user/signin
+user/signup
+user/updatePassword
+user/deleteUser
+
+admin user management to be added
+*/
 
 router.post("/signin", async (req, res) => {
   try {
@@ -37,6 +55,18 @@ router.post("/updatePassword", async (req, res) => {
     }
 });
 
+router.post("/deleteUser", async (req, res) => {
+    try {
+        const { token } = req.body;
+        let user = await getUserbyToken(token);
+        let msg = await deleteUser(user.uid);
+        res.json(msg);
+    }catch(err){
+        console.log(err);
+        res.json({"message": err.message})
+    }
+});
+
 router.get("/test", async (req, res) => {
     try {
         let user = {message:"test"};
@@ -48,5 +78,4 @@ router.get("/test", async (req, res) => {
     }
 });
 
-        
 export default router;
