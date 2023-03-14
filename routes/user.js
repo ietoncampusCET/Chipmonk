@@ -5,7 +5,10 @@ import {
         updatePassword,
         deleteUser
     } from "../controller/user.js";
-import { getUserbyToken } from "../helper/userManagement.js";
+import { 
+    getUserbyToken,
+    isAuthenticated,
+ } from "../helper/userManagement.js";
 
 
 // initialize router
@@ -69,7 +72,8 @@ router.post("/deleteUser", async (req, res) => {
 
 router.get("/test", async (req, res) => {
     try {
-        let user = {message:"test"};
+
+        let user = {message: await isAuthenticated()};
         res.json(user);
     }
     catch(err){

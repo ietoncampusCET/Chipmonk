@@ -1,7 +1,8 @@
 import { adminAuth } from "../index.js";
+import {auth} from "../fire.js";
 
 export function isUserAdmin(user) {
-  return user.claims.admin;
+  return user.admin;
 }
 
 export async function getUserbyToken(token) {
@@ -18,5 +19,16 @@ export async function getUserbyToken(token) {
   }
 }
 
+export async function isAuthenticated(token=null) {
+  if(auth.currentUser){
+    return true;
+ }
+ else if (token) {
+  const user = await getUserbyToken(token);
+  if (user) {
+    return true;
+  }
+  return false;
+}
 
-
+}
