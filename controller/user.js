@@ -1,18 +1,22 @@
-import { createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
-import { ref, set } from "firebase/database";
+import { getAuth } from "firebase-admin/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import {auth} from "../fire.js";
+import {adminAuth} from "../index.js";
 
-export async function  createUser(email,password,fullname,type,auth,database) {
+export async function  createUser(email,password,fullname) {
   try{
-    const user = await createUserWithEmailAndPassword(auth, email, password);
-    const uid = user.user.uid;
-    const userRef = ref(database, 'users/' + uid);
-    set(userRef, {
-      name: fullname,
-      email: email,
-      uid: uid,
-      type:type
+    await auth.signOut();
+    let user = await adminAuth.createUser( {
+      email:email, 
+      password: password, 
+      displayName: fullname, 
+      disabled: false
     });
-    return user;
+    console.log(user);
+    await adminAuth.setCustomUserClaims(user.uid, {admin: false});
+
+    user = await signInWithEmailAndPassword(auth, email, password)
+    return user
   }
   catch(err){
     console.log(err);
@@ -20,9 +24,10 @@ export async function  createUser(email,password,fullname,type,auth,database) {
   }
 }
 
-export async function signinUser(email,password,auth){
+export async function signinUser(email,password){
   try{
-    const user = await signInWithEmailAndPassword(auth, email, password);
+    await auth.signOut();
+    const user = await signInWithEmailAndPassword(auth, email, password)
     return user;
   }
   catch(err){

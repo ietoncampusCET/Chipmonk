@@ -1,13 +1,14 @@
 import  express, { Router }  from "express";
+import { getAuth } from "firebase-admin/auth";
 import { createUser,signinUser } from "../controller/user.js";
-import { auth,database } from "../index.js";
+import { database } from "../index.js";
 
 const router = express.Router();
 
-router.post("/signin", (req, res) => {
+router.post("/signin", async (req, res) => {
   try {
     const { email, password } = req.body;
-    user= signinUser(email, password,auth,database);
+    let user= await signinUser(email, password);
     res.json(user);
 } catch (err) {
         console.log(err);
@@ -17,8 +18,8 @@ router.post("/signin", (req, res) => {
 
 router.post("/signup", async (req, res) => {
     try {
-        const { email, password ,fullname,type} = req.body;
-        user = createUser(email, password,fullname,type,auth,database);
+        const { email, password ,fullname} = req.body;
+        let user = await createUser(email, password,fullname);
         res.json(user);
     }catch(err){
         console.log(err);
