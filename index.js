@@ -6,6 +6,7 @@ import {getFirestore} from "firebase-admin/firestore";
 import { firebaseAdminConfig } from './key.js'
 import bodyParser from 'body-parser';
 import user from './routes/user.js'
+import product from './routes/products.js'
 
 export const app = express()
 
@@ -19,6 +20,7 @@ const firebaseapp = initializeApp({credential:cert(firebaseAdminConfig),
 export const database = getFirestore(firebaseapp);
 export const adminAuth = getAuth(firebaseapp);
 app.use('/user',user )
+app.use('/product',product)
 
 app.listen(PORT, () => {console.log(`Server running on port ${PORT}`)});
 

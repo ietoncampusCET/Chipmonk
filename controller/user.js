@@ -11,10 +11,11 @@ export async function setAdmin(user) {
   }
 }
 
-export async function createUser(email,password,fullname) {
+export async function createUser(username,email,password,fullname) {
   try{
     await auth.signOut();
     let user = await adminAuth.createUser( {
+      uid:username,
       email:email, 
       password: password, 
       displayName: fullname, 

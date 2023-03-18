@@ -21,6 +21,7 @@ export async function getUserbyToken(token) {
 
 export async function isAuthenticated(token=null) {
   if(auth.currentUser){
+    console.log("User is authenticated");
     return true;
  }
  else if (token) {
